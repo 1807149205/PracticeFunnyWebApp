@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
+import ApiClient from '../utils/request'
+import { ElMessage } from 'element-plus'
+import router from '../router/index'
 
 const form = reactive({
     username: '',
@@ -7,7 +10,19 @@ const form = reactive({
 })
 
 const login = async () => {
+    console.log(form);
+    const {code, msg, data} = await ApiClient.post(`/admin/login`, JSON.stringify(form));
+    console.log(code,msg,data);
     
+    if (code === 400) {
+        ElMessage({
+            message: msg,
+            type: 'warning'
+        })
+    }
+    if (code == 200) {
+        router.push('/');
+    }
 }
 
 </script>
